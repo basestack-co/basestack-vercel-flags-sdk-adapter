@@ -2,17 +2,12 @@ import { RequestCookies } from "@edge-runtime/cookies";
 import { HeadersAdapter, RequestCookiesAdapter } from "@vercel/flags";
 import { describe, expect, it, vi } from "vitest";
 import { createBasestackAdapter } from "../src";
+import { createJsonResponse } from "./test-utils";
 
 const createDecideContext = () => ({
   headers: HeadersAdapter.seal(new Headers()),
   cookies: RequestCookiesAdapter.seal(new RequestCookies(new Headers()))
 });
-
-const createJsonResponse = (status: number, body: unknown) =>
-  new Response(JSON.stringify(body), {
-    status,
-    headers: { "content-type": "application/json" }
-  });
 
 describe("createBasestackAdapter", () => {
   it("fetches a single flag and resolves its payload", async () => {
@@ -29,7 +24,7 @@ describe("createBasestackAdapter", () => {
     const adapter = createBasestackAdapter<{ headline: string }>({
       projectKey: "proj",
       environmentKey: "env",
-      fetch: fetchMock,
+      fetch: fetchMock as unknown as typeof fetch,
       resolveValue: (flag) => flag.payload as { headline: string }
     });
 
@@ -51,7 +46,7 @@ describe("createBasestackAdapter", () => {
     const adapter = createBasestackAdapter<boolean>({
       projectKey: "proj",
       environmentKey: "env",
-      fetch: fetchMock,
+      fetch: fetchMock as unknown as typeof fetch,
       resolveValue: (flag) => flag.enabled
     });
 
@@ -73,7 +68,7 @@ describe("createBasestackAdapter", () => {
     const adapter = createBasestackAdapter<string>({
       projectKey: "proj",
       environmentKey: "env",
-      fetch: fetchMock,
+      fetch: fetchMock as unknown as typeof fetch,
       cacheTtlMs: 1000,
       resolveValue: (flag) => flag.payload as string
     });
@@ -103,7 +98,7 @@ describe("createBasestackAdapter", () => {
     const adapter = createBasestackAdapter<string>({
       projectKey: "proj",
       environmentKey: "env",
-      fetch: fetchMock,
+      fetch: fetchMock as unknown as typeof fetch,
       onError
     });
 
@@ -138,7 +133,7 @@ describe("createBasestackAdapter", () => {
     const adapter = createBasestackAdapter<string>({
       projectKey: "proj",
       environmentKey: "env",
-      fetch: fetchMock,
+      fetch: fetchMock as unknown as typeof fetch,
       prefetch: "all",
       resolveValue: (flag) => flag.payload as string
     });
