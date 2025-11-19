@@ -34,6 +34,10 @@ body {
   margin: 0 0 0.5rem 0;
 }
 
+.card h2 {
+  margin: 0 0 0.5rem 0;
+}
+
 .card.muted {
   background: #f1f5f9;
 }
@@ -41,4 +45,34 @@ body {
 .status {
   font-family: "JetBrains Mono", monospace;
   margin: 0;
+}
+
+.beta-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.beta-form input {
+  border-radius: 0.75rem;
+  border: 1px solid #cbd5f5;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+}
+
+.beta-form button {
+  border: none;
+  border-radius: 999px;
+  padding: 0.75rem 1.25rem;
+  background: #0f172a;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.beta-form button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

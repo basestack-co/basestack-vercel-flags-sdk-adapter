@@ -5,7 +5,8 @@ const basestack = createBasestackAdapter<boolean>({
   endpoint: "https://flags-api.basestack.co/v1",
   projectKey: "cmi66kums00020mpq5rw7ezx9",
   environmentKey: "cmi66kumz00040mpqps87kxn8",
-  cacheTtlMs: 15_000, // 15 seconds
+  cacheTtlMs: 15_000,
+  requestTimeoutMs: 5_000,
   resolveValue: (flag) => flag.enabled,
 });
 
