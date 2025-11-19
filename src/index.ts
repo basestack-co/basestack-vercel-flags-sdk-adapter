@@ -6,5 +6,5 @@ export type {
   BasestackFlag,
   BasestackFlagValueResolver,
   BasestackFlagsClientOptions,
-  JsonValue
+  JsonValue,
 } from "./types";

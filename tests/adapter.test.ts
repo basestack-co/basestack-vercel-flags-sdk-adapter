@@ -1,5 +1,5 @@
 import { RequestCookies } from "@edge-runtime/cookies";
-import { HeadersAdapter, RequestCookiesAdapter } from "@vercel/flags";
+import { HeadersAdapter, RequestCookiesAdapter } from "flags";
 import { describe, expect, it, vi } from "vitest";
 import { createBasestackAdapter } from "../src";
 import { createJsonResponse } from "./test-utils";
@@ -12,7 +12,7 @@ const createDecideContext = () => ({
 describe("createBasestackAdapter", () => {
   it("fetches a single flag and resolves its payload", async () => {
     const fetchMock = vi.fn(async (url: RequestInfo) => {
-      expect(String(url)).toBe("https://flags-api.basestack.co/v1/example-flag");
+      expect(String(url)).toBe("https://flags-api.basestack.co/v1/flags/example-flag");
 
       return createJsonResponse(200, {
         slug: "example-flag",

@@ -2,10 +2,10 @@ import { flag } from "flags/next";
 import { createBasestackAdapter } from "../../../dist";
 
 const basestack = createBasestackAdapter<boolean>({
-  endpoint: "http://localhost:4000/v1/flags",
-  projectKey: "cmhj9vgjl000svj8oed92qi9u",
-  environmentKey: "cmhj9vgjo000uvj8ogf2m2fug",
-  cacheTtlMs: 15_000,
+  endpoint: "https://flags-api.basestack.co/v1",
+  projectKey: "cmi66kums00020mpq5rw7ezx9",
+  environmentKey: "cmi66kumz00040mpqps87kxn8",
+  cacheTtlMs: 15_000, // 15 seconds
   resolveValue: (flag) => flag.enabled,
 });
 

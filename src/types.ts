@@ -1,4 +1,4 @@
-import type { Identify, Origin } from "@vercel/flags";
+import type { Identify, Origin } from "flags";
 import type { BasestackAdapterError } from "./errors";
 
 export type JsonValue =
@@ -52,12 +52,14 @@ export type BasestackFlagValueResolver<ValueType> = (
   flag: BasestackFlag
 ) => ValueType | undefined;
 
-export type BasestackAdapterOptions<ValueType, EntitiesType = undefined> =
-  BasestackFlagsClientOptions & {
-    resolveValue?: BasestackFlagValueResolver<ValueType>;
-    onError?: (error: BasestackAdapterError) => void;
-    origin?: Origin | string | ((key: string) => Origin | string | undefined);
-    reportValue?: boolean;
-    prefetch?: "none" | "all";
-    identify?: Identify<EntitiesType>;
-  };
+export type BasestackAdapterOptions<
+  ValueType,
+  EntitiesType = undefined
+> = BasestackFlagsClientOptions & {
+  resolveValue?: BasestackFlagValueResolver<ValueType>;
+  onError?: (error: BasestackAdapterError) => void;
+  origin?: Origin | string | ((key: string) => Origin | string | undefined);
+  reportValue?: boolean;
+  prefetch?: "none" | "all";
+  identify?: Identify<EntitiesType>;
+};

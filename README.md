@@ -27,7 +27,7 @@ shape your application expects.
 
 ```ts
 // app/flags.ts
-import { flag } from "@vercel/flags/next";
+import { flag } from "flags/next";
 import { createBasestackAdapter } from "@basestack/vercel-flags-sdk";
 
 const basestack = createBasestackAdapter<boolean>({
@@ -45,7 +45,7 @@ export const onboardingFlowFlag = flag<boolean>({
 ```
 
 Whenever the SDK evaluates `onboardingFlowFlag()` it will call your Basestack API at
-`https://flags-api.basestack.co/v1/{slug}`. Successful responses are cached for 30 seconds by default,
+`https://flags-api.basestack.co/v1/flags/{slug}`. Successful responses are cached for 30 seconds by default,
 so subsequent evaluations during a single request won't issue extra network calls.
 
 ### Adapter options
@@ -54,7 +54,7 @@ so subsequent evaluations during a single request won't issue extra network call
 | --- | --- | --- | --- |
 | `projectKey` | `string` | — | Required. Basestack project key sent via the `x-project-key` header. |
 | `environmentKey` | `string` | — | Required. Basestack environment key sent via the `x-environment-key` header. |
-| `endpoint` | `string` | `https://flags-api.basestack.co/v1` | Override when pointing to a different deployment. |
+| `endpoint` | `string` | `https://flags-api.basestack.co/v1` | Override when pointing to a different deployment (provide the API base; the client appends `/flags` paths automatically). |
 | `fetch` | `typeof fetch` | `globalThis.fetch` | Provide a custom fetch implementation (e.g. undici) when running outside Node 18+/Bun. |
 | `resolveValue` | `(flag) => Value` | `flag.payload ?? flag.enabled` | Maps the raw Basestack flag document to the value returned by the SDK. |
 | `cacheTtlMs` | `number` | `30_000` | Amount of time (ms) a resolved flag should be cached in memory. Set to `0` to disable. |

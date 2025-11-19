@@ -4,7 +4,7 @@ import type {
   BasestackFlag,
   BasestackFlagsClientOptions,
   BasestackFlagsResponse,
-  BasestackRawFlag
+  BasestackRawFlag,
 } from "./types";
 import {
   DEFAULT_ENDPOINT,
@@ -13,7 +13,7 @@ import {
   isRawFlag,
   normalizeFlag,
   parseJson,
-  trimTrailingSlash
+  trimTrailingSlash,
 } from "./utils";
 
 type CacheEntry = {
@@ -42,7 +42,10 @@ export class BasestackFlagsClient {
 
   private readonly cache = new Map<string, CacheEntry>();
 
-  private readonly pending = new Map<string, Promise<BasestackFlag | undefined>>();
+  private readonly pending = new Map<
+    string,
+    Promise<BasestackFlag | undefined>
+  >();
 
   constructor(options: BasestackFlagsClientOptions) {
     this.projectKey = options.projectKey;
@@ -85,12 +88,17 @@ export class BasestackFlagsClient {
   }
 
   async listFlags(): Promise<BasestackFlag[]> {
-    const result = await this.request<BasestackFlagsResponse>("", { allowNotFound: false });
+    const result = await this.request<BasestackFlagsResponse>("/flags", {
+      allowNotFound: false,
+    });
 
     if (!result.body || !isFlagsResponse(result.body)) {
-      throw new BasestackAdapterError("Unexpected response when listing flags", {
-        responseBody: result.body
-      });
+      throw new BasestackAdapterError(
+        "Unexpected response when listing flags",
+        {
+          responseBody: result.body,
+        }
+      );
     }
 
     const flags = result.body.flags.map(normalizeFlag);
@@ -124,7 +132,7 @@ export class BasestackFlagsClient {
 
     this.cache.set(flag.slug, {
       value: flag,
-      expiresAt: Date.now() + this.cacheTtlMs
+      expiresAt: Date.now() + this.cacheTtlMs,
     });
   }
 
@@ -133,12 +141,11 @@ export class BasestackFlagsClient {
       throw new BasestackAdapterError("Flag slug can not be empty");
     }
 
-    const result = await this.request<BasestackRawFlag | BasestackErrorResponse>(
-      `/${encodeURIComponent(slug)}`,
-      {
-        allowNotFound: true
-      }
-    );
+    const result = await this.request<
+      BasestackRawFlag | BasestackErrorResponse
+    >(`/flags/${encodeURIComponent(slug)}`, {
+      allowNotFound: true,
+    });
 
     if (result.status === 404) {
       return undefined;
@@ -153,9 +160,12 @@ export class BasestackFlagsClient {
     }
 
     if (!isRawFlag(result.body)) {
-      throw new BasestackAdapterError("Unexpected response when fetching flag", {
-        responseBody: result.body
-      });
+      throw new BasestackAdapterError(
+        "Unexpected response when fetching flag",
+        {
+          responseBody: result.body,
+        }
+      );
     }
 
     return normalizeFlag(result.body);
@@ -170,7 +180,10 @@ export class BasestackFlagsClient {
     return headers;
   }
 
-  private async request<T>(path: string, options: RequestOptions = {}): Promise<{
+  private async request<T>(
+    path: string,
+    options: RequestOptions = {}
+  ): Promise<{
     status: number;
     body?: T;
   }> {
@@ -180,7 +193,9 @@ export class BasestackFlagsClient {
       );
     }
 
-    const controller = this.requestTimeoutMs ? new AbortController() : undefined;
+    const controller = this.requestTimeoutMs
+      ? new AbortController()
+      : undefined;
     const timeoutId = this.requestTimeoutMs
       ? setTimeout(() => controller?.abort(), this.requestTimeoutMs)
       : undefined;
@@ -189,7 +204,7 @@ export class BasestackFlagsClient {
       const response = await this.fetchImpl(`${this.endpoint}${path}`, {
         method: "GET",
         headers: this.composeHeaders(),
-        signal: controller?.signal
+        signal: controller?.signal,
       });
 
       const text = await response.text();
@@ -204,14 +219,14 @@ export class BasestackFlagsClient {
           `Basestack API request failed with status ${response.status}`,
           {
             status: response.status,
-            responseBody: body ?? text
+            responseBody: body ?? text,
           }
         );
       }
 
       return {
         status: response.status,
-        body: body as T
+        body: body as T,
       };
     } catch (error) {
       if (error instanceof BasestackAdapterError) {
@@ -225,9 +240,12 @@ export class BasestackFlagsClient {
         );
       }
 
-      throw new BasestackAdapterError("Failed to call the Basestack Flags API", {
-        cause: error
-      });
+      throw new BasestackAdapterError(
+        "Failed to call the Basestack Flags API",
+        {
+          cause: error,
+        }
+      );
     } finally {
       if (timeoutId) {
         clearTimeout(timeoutId);

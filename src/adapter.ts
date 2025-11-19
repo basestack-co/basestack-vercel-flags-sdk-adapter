@@ -1,10 +1,10 @@
-import type { Adapter } from "@vercel/flags";
+import type { Adapter } from "flags";
 import { BasestackFlagsClient } from "./client";
 import { BasestackAdapterError, isBasestackAdapterError } from "./errors";
 import type {
   BasestackAdapterOptions,
   BasestackFlag,
-  BasestackFlagValueResolver
+  BasestackFlagValueResolver,
 } from "./types";
 
 const defaultResolver: BasestackFlagValueResolver<unknown> = (flag) =>
@@ -14,14 +14,19 @@ const normalizeOptions = <ValueType, EntitiesType>(
   options: BasestackAdapterOptions<ValueType, EntitiesType>
 ) => ({
   ...options,
-  prefetch: options.prefetch ?? "none"
+  prefetch: options.prefetch ?? "none",
 });
 
-export const createBasestackAdapter = <ValueType = unknown, EntitiesType = undefined>(
+export const createBasestackAdapter = <
+  ValueType = unknown,
+  EntitiesType = undefined
+>(
   rawOptions: BasestackAdapterOptions<ValueType, EntitiesType>
 ): Adapter<ValueType, EntitiesType> => {
   if (!rawOptions?.projectKey) {
-    throw new BasestackAdapterError("'projectKey' is required to create the adapter");
+    throw new BasestackAdapterError(
+      "'projectKey' is required to create the adapter"
+    );
   }
 
   if (!rawOptions.environmentKey) {
@@ -39,7 +44,7 @@ export const createBasestackAdapter = <ValueType = unknown, EntitiesType = undef
     headers: options.headers,
     fetch: options.fetch,
     cacheTtlMs: options.cacheTtlMs,
-    requestTimeoutMs: options.requestTimeoutMs
+    requestTimeoutMs: options.requestTimeoutMs,
   });
 
   const resolver: BasestackFlagValueResolver<ValueType> =
@@ -49,14 +54,19 @@ export const createBasestackAdapter = <ValueType = unknown, EntitiesType = undef
   const handleError = (error: unknown): void => {
     const adapterError = isBasestackAdapterError(error)
       ? error
-      : new BasestackAdapterError("Failed to resolve flag value", { cause: error });
+      : new BasestackAdapterError("Failed to resolve flag value", {
+          cause: error,
+        });
 
     options.onError?.(adapterError);
   };
 
   const adapter: Adapter<ValueType, EntitiesType> = {
     origin: options.origin,
-    config: options.reportValue === undefined ? { reportValue: true } : { reportValue: options.reportValue },
+    config:
+      options.reportValue === undefined
+        ? { reportValue: true }
+        : { reportValue: options.reportValue },
     identify: options.identify,
     initialize:
       options.prefetch === "all"
@@ -81,7 +91,7 @@ export const createBasestackAdapter = <ValueType = unknown, EntitiesType = undef
         handleError(error);
         return undefined as ValueType;
       }
-    }
+    },
   };
 
   return adapter;

@@ -9,6 +9,37 @@ describe("BasestackFlagsClient", () => {
     environmentKey: "env"
   };
 
+  it("hits the /flags/:slug endpoint when fetching a single flag", async () => {
+    const fetchMock = vi.fn(async (url: RequestInfo) => {
+      expect(String(url)).toBe("https://flags-api.basestack.co/v1/flags/path-check");
+
+      return createJsonResponse(200, {
+        slug: "path-check",
+        enabled: true
+      });
+    });
+
+    const client = new BasestackFlagsClient({ ...baseOptions, fetch: fetchMock as unknown as typeof fetch });
+
+    await client.getFlag("path-check");
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("hits the /flags endpoint when listing all flags", async () => {
+    const fetchMock = vi.fn(async (url: RequestInfo) => {
+      expect(String(url)).toBe("https://flags-api.basestack.co/v1/flags");
+
+      return createJsonResponse(200, {
+        flags: []
+      });
+    });
+
+    const client = new BasestackFlagsClient({ ...baseOptions, fetch: fetchMock as unknown as typeof fetch });
+
+    await client.listFlags();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
   it("retrieves and caches a flag", async () => {
     const fetchMock = vi.fn(async () =>
       createJsonResponse(200, {
