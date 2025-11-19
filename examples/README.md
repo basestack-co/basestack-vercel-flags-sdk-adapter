@@ -8,7 +8,7 @@ application and wire up your own flag slugs.
 
 1. From the repository root, run `bun install` followed by `bun run build` once. This creates the
    `dist/` artifacts consumed by the examples via the local `file:` dependency on
-   `@basestack/vercel-flags-sdk`.
+   `@basestack/vercel-flags-sdk-adapter`.
 2. For each example, change into its directory and run `bun install` to pull the framework-specific
    dependencies.
 

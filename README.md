@@ -15,7 +15,7 @@ SDK primitives you already know while letting Basestack act as your remote flag 
 ## Installation
 
 ```bash
-bun add @basestack/vercel-flags-sdk
+bun add flags @basestack/vercel-flags-sdk-adapter
 # or npm/pnpm/yarn if you prefer
 ```
 
@@ -28,7 +28,7 @@ shape your application expects.
 ```ts
 // app/flags.ts
 import { flag } from "flags/next";
-import { createBasestackAdapter } from "@basestack/vercel-flags-sdk";
+import { createBasestackAdapter } from "@basestack/vercel-flags-sdk-adapter";
 
 const basestack = createBasestackAdapter<boolean>({
   projectKey: process.env.BASESTACK_PROJECT_KEY!,
