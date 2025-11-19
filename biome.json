@@ -1,0 +1,17 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.3.6/schema.json",
+  "files": {
+    "includes": ["src", "tests", "tsdown.config.ts", "vitest.config.ts", "README.md"]
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "lineWidth": 100
+  },
+  "linter": {
+    "rules": {
+      "style": {
+        "useConst": "error"
+      }
+    }
+  }
+}
