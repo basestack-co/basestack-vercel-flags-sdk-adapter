@@ -1,6 +1,6 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
-import { headerFlag } from "./flags";
+import { headerFlag } from "../libs/flags";
 
 type HomeProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
